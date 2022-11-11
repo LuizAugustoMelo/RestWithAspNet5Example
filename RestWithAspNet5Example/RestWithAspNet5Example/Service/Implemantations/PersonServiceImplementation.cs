@@ -61,7 +61,7 @@ namespace RestWithAspNet5Example.Service.Implemantations
 
         private long IncrementAndGet()
         {
-            return Interlocked.Increment(ref count)
+            return Interlocked.Increment(ref count);
         }
     }
 }
