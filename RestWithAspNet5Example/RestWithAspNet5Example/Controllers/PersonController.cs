@@ -5,7 +5,7 @@ using RestWithAspNet5Example.Service;
 namespace RestWithAspNet5Example.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PersonController : Controller
     {
         private readonly ILogger<CalculatorController> _logger;
