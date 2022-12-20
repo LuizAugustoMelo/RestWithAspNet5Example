@@ -1,35 +1,39 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+﻿using Microsoft.EntityFrameworkCore;
 using RestWithAspNet5Example.Model;
+using RestWithAspNet5Example.Model.Base;
 using RestWithAspNet5Example.Model.Context;
 using System;
 
-namespace RestWithAspNet5Example.Repository.Implemantations
+namespace RestWithAspNet5Example.Repository.Generic
 {
-    public class PersonRepositoryImplementation : IPersonRepository
+    public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
         private MySQLContext _context;
 
-        public PersonRepositoryImplementation(MySQLContext context)
+        private DbSet<T> _dbSet;
+
+
+        public GenericRepository(MySQLContext context)
         {
             _context = context;
+            _dbSet = _context.Set<T>();
         }
 
-        public List<Person> FindAll()
+        public List<T> FindAll()
         {
-            return _context.Persons.ToList();
+            return _dbSet.ToList();
         }
 
-        public Person FindById(long id)
+        public T FindById(long id)
         {
-            return _context.Persons.SingleOrDefault(x => x.Id.Equals(id));
+            return _dbSet.SingleOrDefault(x => x.Id.Equals(id));
         }
 
-        public Person Create(Person person)
+        public T Create(T item)
         {
             try
             {
-                _context.Add(person);
+                _context.Add(item);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -37,20 +41,20 @@ namespace RestWithAspNet5Example.Repository.Implemantations
 
                 throw ex;
             }
-            return person;
+            return item;
         }
 
-        public Person Update(Person person)
+        public T Update(T item)
         {
-            if (!Exists(person.Id)) return null;
+            if (!Exists(item.Id)) return null;
 
-            var result = FindById(person.Id);
+            var result = FindById(item.Id);
 
             if (result != null)
             {
                 try
                 {
-                    _context.Entry(result).CurrentValues.SetValues(person);
+                    _context.Entry(result).CurrentValues.SetValues(item);
                     _context.SaveChanges();
                 }
                 catch (Exception ex)
@@ -58,7 +62,7 @@ namespace RestWithAspNet5Example.Repository.Implemantations
                     throw ex;
                 }
             }
-            return person;
+            return item;
         }
 
         public void Delete(long id)
@@ -69,7 +73,7 @@ namespace RestWithAspNet5Example.Repository.Implemantations
             {
                 try
                 {
-                    _context.Persons.Remove(result);
+                    _dbSet.Remove(result);
                     _context.SaveChanges();
                 }
                 catch (Exception ex)
@@ -79,9 +83,9 @@ namespace RestWithAspNet5Example.Repository.Implemantations
             }
         }
 
-        public bool Exists(long Id)
+        public bool Exists(long id)
         {
-            return _context.Persons.Any(x => x.Id.Equals(Id));
+            return _dbSet.Any(x => x.Id.Equals(id));
         }
     }
 }

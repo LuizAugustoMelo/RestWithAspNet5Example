@@ -1,12 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using RestWithAspNet5Example.Model.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestWithAspNet5Example.Model
 {
     [Table("person")]
-    public class Person
+    public class Person : BaseEntity
     {
-        [Column("Id")]
-        public long Id { get; set; }
         [Column("FirstName")]
         public string FirstName { get; set; }
         [Column("LastName")]
