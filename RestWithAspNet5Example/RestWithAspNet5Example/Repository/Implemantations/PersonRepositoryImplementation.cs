@@ -42,7 +42,7 @@ namespace RestWithAspNet5Example.Repository.Implemantations
 
         public Person Update(Person person)
         {
-            if (!Exists(person.Id)) return new Person();
+            if (!Exists(person.Id)) return null;
 
             var result = FindById(person.Id);
 
