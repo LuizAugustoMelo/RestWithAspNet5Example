@@ -7,6 +7,7 @@ using Serilog;
 using MySqlConnector;
 using EvolveDb;
 using RestWithAspNet5Example.Repository.Generic;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureLogging(logging =>
@@ -25,6 +26,14 @@ builder.Services.AddControllers();
 //Set/Get connection database string
 var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
 builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
+
+builder.Services.AddMvc(options =>
+{
+	options.RespectBrowserAcceptHeader = true;
+	options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
+    options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
+}).AddXmlSerializerFormatters();
+
 //Versioning API
 builder.Services.AddApiVersioning();
 
