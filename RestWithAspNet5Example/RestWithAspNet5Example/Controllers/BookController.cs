@@ -9,10 +9,10 @@ namespace RestWithAspNet5Example.Controllers
     [Route("api/[controller]/v{version:apiVersion}")]
     public class BookController : Controller
     {
-        private readonly ILogger<CalculatorController> _logger;
+        private readonly ILogger<BookController> _logger;
         private IBookBusiness _bookBusiness;
                 
-        public BookController(ILogger<CalculatorController> logger, IBookBusiness bookService)
+        public BookController(ILogger<BookController> logger, IBookBusiness bookService)
         {
             _logger = logger;
             _bookBusiness = bookService;

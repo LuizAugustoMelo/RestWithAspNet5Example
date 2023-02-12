@@ -9,10 +9,10 @@ namespace RestWithAspNet5Example.Controllers
     [Route("api/[controller]/v{version:apiVersion}")]
     public class PersonController : Controller
     {
-        private readonly ILogger<CalculatorController> _logger;
+        private readonly ILogger<PersonController> _logger;
         private IPersonBusiness _personBusiness;
                 
-        public PersonController(ILogger<CalculatorController> logger, IPersonBusiness personService)
+        public PersonController(ILogger<PersonController> logger, IPersonBusiness personService)
         {
             _logger = logger;
             _personBusiness = personService;
