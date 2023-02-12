@@ -36,14 +36,14 @@ namespace RestWithAspNet5Example.Data.Converter.Implementation
             };
         }
 
-        public List<Person?> Parse(List<PersonDTO> origin)
+        public List<Person?>? Parse(List<PersonDTO> origin)
         {
             if (origin == null) return null;
 
             return origin.Select(item => Parse(item)).ToList();
         }
 
-        public List<PersonDTO?> Parse(List<Person> origin)
+        public List<PersonDTO?>? Parse(List<Person> origin)
         {
             if (origin == null) return null;
 
