@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RestWithAspNet5Example.Model;
 using RestWithAspNet5Example.Model.Base;
 using RestWithAspNet5Example.Model.Context;
-using System;
 
 namespace RestWithAspNet5Example.Repository.Generic
 {
@@ -35,19 +33,16 @@ namespace RestWithAspNet5Example.Repository.Generic
             {
                 _context.Add(item);
                 _context.SaveChanges();
+                return item;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
-            return item;
         }
 
         public T Update(T item)
         {
-            if (!Exists(item.Id)) return null;
-
             var result = FindById(item.Id);
 
             if (result != null)
@@ -56,13 +51,17 @@ namespace RestWithAspNet5Example.Repository.Generic
                 {
                     _context.Entry(result).CurrentValues.SetValues(item);
                     _context.SaveChanges();
+                    return item;
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
             }
-            return item;
+            else
+            {
+                return null;
+            }
         }
 
         public void Delete(long id)
