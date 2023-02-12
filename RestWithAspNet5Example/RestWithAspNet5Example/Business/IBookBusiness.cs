@@ -1,13 +1,14 @@
-﻿using RestWithAspNet5Example.Model;
+﻿using RestWithAspNet5Example.Data.DTO;
+using RestWithAspNet5Example.Model;
 
 namespace RestWithAspNet5Example.Business
 {
     public interface IBookBusiness
     {
-        Book Create(Book book);
-        Book FindById(long id);
-        List<Book> FindAll();
-        Book Update(Book book);
+        BookDTO FindById(long id);
+        List<BookDTO> FindAll();
+        BookDTO Create(BookDTO book);
+        BookDTO Update(BookDTO book);
         void Delete(long id);
     }
 }
