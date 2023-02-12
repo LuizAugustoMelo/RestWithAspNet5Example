@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RestWithAspNet5Example.Model;
 using RestWithAspNet5Example.Business;
+using RestWithAspNet5Example.Data.DTO;
 
 namespace RestWithAspNet5Example.Controllers
 {
@@ -33,14 +33,14 @@ namespace RestWithAspNet5Example.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] Person person)
+        public IActionResult Post([FromBody] PersonDTO person)
         {
             if (person == null) return BadRequest();
             return Ok(_personBusiness.Create(person));
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] Person person)
+        public IActionResult Put([FromBody] PersonDTO person)
         {
             if (person == null) return BadRequest();
             return Ok(_personBusiness.Update(person));
