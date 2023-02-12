@@ -1,9 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+﻿using RestWithAspNet5Example.Data.Converter.Implementation;
+using RestWithAspNet5Example.Data.DTO;
 using RestWithAspNet5Example.Model;
-using RestWithAspNet5Example.Model.Context;
 using RestWithAspNet5Example.Repository;
-using System;
 
 namespace RestWithAspNet5Example.Business.Implemantations
 {
@@ -11,29 +9,34 @@ namespace RestWithAspNet5Example.Business.Implemantations
     {
         private readonly IRepository<Person> _repository;
 
+        private readonly PersonConverter _converter;
+
         public PersonBusinessImplementation(IRepository<Person> IPersonRepository)
         {
             _repository = IPersonRepository;
+            _converter = new PersonConverter();
         }
 
-        public List<Person> FindAll()
+        public List<PersonDTO?>? FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
-        public Person FindById(long id)
+        public PersonDTO? FindById(long id)
         {
-            return _repository.FindById(id);
+            return _converter.Parse(_repository.FindById(id));
         }
 
-        public Person Create(Person person)
+        public PersonDTO? Create(PersonDTO person)
         {
-            return _repository.Create(person);
+            var personEntity = _converter.Parse(person);
+            return _converter.Parse(_repository.Create(personEntity));
         }
 
-        public Person Update(Person person)
+        public PersonDTO? Update(PersonDTO person)
         {
-            return _repository.Update(person);
+            var personEntity = _converter.Parse(person);
+            return _converter.Parse(_repository.Update(personEntity));
         }
 
         public void Delete(long id)

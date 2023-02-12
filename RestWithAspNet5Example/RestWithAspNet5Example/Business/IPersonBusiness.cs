@@ -1,13 +1,13 @@
-﻿using RestWithAspNet5Example.Model;
+﻿using RestWithAspNet5Example.Data.DTO;
 
 namespace RestWithAspNet5Example.Business
 {
     public interface IPersonBusiness
     {
-        Person Create(Person person);
-        Person FindById(long id);
-        List<Person> FindAll();
-        Person Update(Person person);
+        PersonDTO Create(PersonDTO person);
+        PersonDTO FindById(long id);
+        List<PersonDTO> FindAll();
+        PersonDTO Update(PersonDTO person);
         void Delete(long id);
     }
 }
