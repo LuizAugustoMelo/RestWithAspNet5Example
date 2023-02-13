@@ -11,7 +11,7 @@ namespace RestWithAspNet5Example.Hypermedia.Enricher
 
         protected override Task EnrichModel(BookDTO content, IUrlHelper urlHelper)
         {
-            var path = "api/persons/v1";
+            var path = "api/book/v1";
             string link = GetLink(content.Id, urlHelper, path);
 
             content.Links.Add(new HyperMediaLink()
@@ -57,8 +57,9 @@ namespace RestWithAspNet5Example.Hypermedia.Enricher
         {
             lock (_lock)
             {
-                var url = new { controller = path, id = id };
-                return new StringBuilder(urlHelper.Link("DefaultApi", url)).ToString().ToLower().Replace("%2f", "/");
+                var url = new { controller = path, id = id }; 
+                string link = new StringBuilder(urlHelper.Link("DefaultApi", url)).ToString().ToLower().Replace("%2f", "/");
+                return link;
             }
         }
     }
