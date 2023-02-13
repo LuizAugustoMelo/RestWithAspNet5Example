@@ -20,6 +20,10 @@ namespace RestWithAspNet5Example.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType((200), Type = typeof(List<PersonDTO>))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
@@ -27,6 +31,10 @@ namespace RestWithAspNet5Example.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType((200), Type = typeof(PersonDTO))]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
         {
@@ -36,6 +44,9 @@ namespace RestWithAspNet5Example.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType((200), Type = typeof(PersonDTO))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] PersonDTO person)
         {
@@ -44,6 +55,9 @@ namespace RestWithAspNet5Example.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType((200), Type = typeof(PersonDTO))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody] PersonDTO person)
         {
@@ -52,6 +66,9 @@ namespace RestWithAspNet5Example.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType((204))]
+        [ProducesResponseType((400))]
+        [ProducesResponseType((401))]
         public IActionResult Delete(long id)
         {
             _personBusiness.Delete(id);
