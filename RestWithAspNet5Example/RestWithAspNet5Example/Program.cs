@@ -8,6 +8,9 @@ using MySqlConnector;
 using EvolveDb;
 using RestWithAspNet5Example.Repository.Generic;
 using Microsoft.Net.Http.Headers;
+using System.Linq.Expressions;
+using RestWithAspNet5Example.Hypermedia.Filters;
+using RestWithAspNet5Example.Hypermedia.Enricher;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureLogging(logging =>
@@ -33,6 +36,12 @@ builder.Services.AddMvc(options =>
 	options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
     options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
 }).AddXmlSerializerFormatters();
+
+var filterOptions = new HyperMediaFilterOptions();
+filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
+
+builder.Services.AddSingleton(filterOptions);
 
 //Versioning API
 builder.Services.AddApiVersioning();
@@ -70,5 +79,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapControllerRoute("DefaultApi", "{controller=value}/{id?}");
 
 app.Run();
