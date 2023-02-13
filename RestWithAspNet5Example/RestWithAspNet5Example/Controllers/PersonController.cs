@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestWithAspNet5Example.Business;
 using RestWithAspNet5Example.Data.DTO;
+using RestWithAspNet5Example.Hypermedia.Filters;
 
 namespace RestWithAspNet5Example.Controllers
 {
@@ -19,12 +20,14 @@ namespace RestWithAspNet5Example.Controllers
         }
 
         [HttpGet]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
         {
             return Ok(_personBusiness.FindAll());
         }
 
         [HttpGet("{id}")]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
         {
             var person = _personBusiness.FindById(id);
@@ -33,6 +36,7 @@ namespace RestWithAspNet5Example.Controllers
         }
 
         [HttpPost]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] PersonDTO person)
         {
             if (person == null) return BadRequest();
@@ -40,6 +44,7 @@ namespace RestWithAspNet5Example.Controllers
         }
 
         [HttpPut]
+        [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody] PersonDTO person)
         {
             if (person == null) return BadRequest();
