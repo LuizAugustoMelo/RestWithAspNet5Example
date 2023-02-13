@@ -23,8 +23,15 @@ builder.Host.ConfigureLogging(logging =>
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
-// Add services to the container.
 
+builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
+{
+	builder.AllowAnyOrigin()
+	.AllowAnyMethod()
+	.AllowAnyHeader();
+}));
+
+// Add services to the container.
 builder.Services.AddControllers();
 
 //Set/Get connection database string
@@ -94,6 +101,8 @@ if(app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors();
 
 app.UseSwagger();
 app.UseSwaggerUI(c => 
