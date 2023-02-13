@@ -8,9 +8,10 @@ using MySqlConnector;
 using EvolveDb;
 using RestWithAspNet5Example.Repository.Generic;
 using Microsoft.Net.Http.Headers;
-using System.Linq.Expressions;
 using RestWithAspNet5Example.Hypermedia.Filters;
 using RestWithAspNet5Example.Hypermedia.Enricher;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Rewrite;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.ConfigureLogging(logging =>
@@ -46,6 +47,22 @@ builder.Services.AddSingleton(filterOptions);
 //Versioning API
 builder.Services.AddApiVersioning();
 
+builder.Services.AddSwaggerGen(options =>
+{
+	options.SwaggerDoc("v1",
+		new OpenApiInfo
+		{
+			Title = "Rest from 0 to Azure with ASP.Net Core 6 and Docker",
+			Version = "v1",
+			Description = "API RESTful developed in course 'Rest from 0 to Azure with ASP.Net Core 6 and Docker'",
+			Contact = new OpenApiContact
+			{
+				Name = "Luiz Augusto Melo",
+				Url = new Uri("https://github.com/LuizAugustoMelo")
+			}
+        });
+});
+
 builder.Services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
 builder.Services.AddScoped<IBookBusiness, BookBusinessImplementation>();
 
@@ -77,6 +94,17 @@ if(app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseSwagger();
+app.UseSwaggerUI(c => 
+{
+	c.SwaggerEndpoint("/swagger/v1/swagger.json", 
+		"Rest from 0 to Azure with ASP.Net Core 6 and Docker - V1");
+});
+
+var option = new RewriteOptions();
+option.AddRedirect("^$", "swagger");
+app.UseRewriter(option);
 
 app.MapControllers();
 app.MapControllerRoute("DefaultApi", "{controller=value}/{id?}");
