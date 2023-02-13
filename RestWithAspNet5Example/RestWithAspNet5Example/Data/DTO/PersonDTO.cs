@@ -1,9 +1,11 @@
-﻿using System.Text.Json;
+﻿using RestWithAspNet5Example.Hypermedia;
+using RestWithAspNet5Example.Hypermedia.Abstract;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace RestWithAspNet5Example.Data.DTO
 {
-    public class PersonDTO
+    public class PersonDTO : ISupportsHyperMedia
     {
         /*[JsonPropertyOrder(-5)]
         [JsonIgnore] // Used to ignore a field
@@ -17,6 +19,7 @@ namespace RestWithAspNet5Example.Data.DTO
         public string Address { get; set; }
 
         public string Gender { get; set; }
-        
+
+        public List<HyperMediaLink> Links { get; set; } = new List<HyperMediaLink>();
     }
 }
