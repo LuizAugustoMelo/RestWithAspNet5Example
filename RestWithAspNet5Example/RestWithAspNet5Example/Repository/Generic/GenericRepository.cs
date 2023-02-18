@@ -6,7 +6,7 @@ namespace RestWithAspNet5Example.Repository.Generic
 {
     public class GenericRepository<T> : IRepository<T> where T : BaseEntity
     {
-        private MySQLContext _context;
+        protected MySQLContext _context;
 
         private DbSet<T> _dbSet;
 

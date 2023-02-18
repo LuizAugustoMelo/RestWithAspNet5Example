@@ -8,6 +8,7 @@ namespace RestWithAspNet5Example.Business
         PersonDTO FindById(long id);
         List<PersonDTO> FindAll();
         PersonDTO Update(PersonDTO person);
+        PersonDTO Disable(long id);
         void Delete(long id);
     }
 }

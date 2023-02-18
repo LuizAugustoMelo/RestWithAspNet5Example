@@ -2,16 +2,17 @@
 using RestWithAspNet5Example.Data.DTO;
 using RestWithAspNet5Example.Model;
 using RestWithAspNet5Example.Repository;
+using RestWithAspNet5Example.Repository.Users;
 
 namespace RestWithAspNet5Example.Business.Implemantations
 {
     public class PersonBusinessImplementation : IPersonBusiness
     {
-        private readonly IRepository<Person> _repository;
+        private readonly IPersonRepository _repository;
 
         private readonly PersonConverter _converter;
 
-        public PersonBusinessImplementation(IRepository<Person> IPersonRepository)
+        public PersonBusinessImplementation(IPersonRepository IPersonRepository)
         {
             _repository = IPersonRepository;
             _converter = new PersonConverter();
@@ -37,6 +38,12 @@ namespace RestWithAspNet5Example.Business.Implemantations
         {
             var personEntity = _converter.Parse(person);
             return _converter.Parse(_repository.Update(personEntity));
+        }
+
+        public PersonDTO? Disable(long id)
+        {
+            var personEntity = _repository.Disable(id);
+            return _converter.Parse(personEntity);
         }
 
         public void Delete(long id)

@@ -14,6 +14,7 @@ namespace RestWithAspNet5Example.Model
         public string Address { get; set; }
         [Column("Gender")]
         public string Gender { get; set; }
-        
+        [Column("enabled")]
+        public bool Enabled { get; set; }
     }
 }
