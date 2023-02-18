@@ -21,6 +21,11 @@ namespace RestWithAspNet5Example.Business.Implemantations
             _tokenService = tokenService;
         }
 
+        public bool RevokeToken(string userName)
+        {
+            return _userRepository.RevokeToken(userName);
+        }
+
         public TokenDTO ValidateCredentials(UserDTO userCredentials)
         {
             var user = _userRepository.ValidateCredatials(userCredentials);
@@ -37,6 +42,35 @@ namespace RestWithAspNet5Example.Business.Implemantations
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(_configuration.DaysToExpiry);
+
+            _userRepository.RefreshUserInfo(user);
+
+            DateTime createDate = DateTime.Now;
+            DateTime expirationDate = createDate.AddMinutes(_configuration.Minutes);
+
+            return new TokenDTO(true, createDate.ToString(DATE_FORMAT), expirationDate.ToString(DATE_FORMAT), accessToken, refreshToken);
+        }
+
+        public TokenDTO ValidateCredentials(TokenDTO token)
+        {
+            var accessToken = token.AccessToken;
+            var refreshToken = token.RefreshToken;
+
+            var principal = _tokenService.GetPrincipalFromExpireToken(accessToken);
+
+            var userName = principal.Identity.Name;
+
+            var user = _userRepository.ValidateCredatials(userName);
+
+            if (user == null ||
+                user.RefreshToken != refreshToken ||
+                user.RefreshTokenExpiryTime <= DateTime.Now) 
+                return new TokenDTO(false, String.Empty, String.Empty, String.Empty, String.Empty);
+
+            accessToken = _tokenService.GenerateAccessToken(principal.Claims);
+            refreshToken = _tokenService.GenerateRefreshToken();
+            
+            user.RefreshToken = refreshToken;
 
             _userRepository.RefreshUserInfo(user);
 

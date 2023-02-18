@@ -21,6 +21,22 @@ namespace RestWithAspNet5Example.Repository.Users
             return _context.Users.FirstOrDefault(u => u.UserName.Equals(user.UserName) && u.Password.Equals(pass));
         }
 
+        public User? ValidateCredatials(string userName)
+        {
+            return _context.Users.SingleOrDefault(u => u.UserName.Equals(userName));
+        }
+
+        public bool RevokeToken(string userName)
+        {
+            var user = ValidateCredatials(userName);
+            if (user == null) return false;
+
+            user.RefreshToken = "0";
+            _context.SaveChanges();
+
+            return true;
+        }
+
         public User? FindById(long id)
         {
             return _context.Users.SingleOrDefault(x => x.Id.Equals(id));

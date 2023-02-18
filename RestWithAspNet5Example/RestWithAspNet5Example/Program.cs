@@ -33,44 +33,46 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
     .CreateLogger();
 
+#region Auth
 var tokenConfigurations = new TokenConfiguration();
 
 new ConfigureFromConfigurationOptions<TokenConfiguration>(
-	builder.Configuration.GetSection("TokenConfigurations"))
-	.Configure(tokenConfigurations);
+    builder.Configuration.GetSection("TokenConfigurations"))
+    .Configure(tokenConfigurations);
 
 builder.Services.AddSingleton(tokenConfigurations);
 
 builder.Services.AddAuthentication(options =>
 {
-	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-	options.TokenValidationParameters = new TokenValidationParameters
-	{
-		ValidateIssuer = true,
-		ValidateAudience = true,
-		ValidateLifetime = true,
-		ValidateIssuerSigningKey = true,
-		ValidIssuer = tokenConfigurations.Issuer,
-		ValidAudience = tokenConfigurations.Audience,
-		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfigurations.Secret))
-	};
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = tokenConfigurations.Issuer,
+        ValidAudience = tokenConfigurations.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfigurations.Secret))
+    };
 });
 
 builder.Services.AddAuthorization(auth =>
 {
-	auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
-		.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-		.RequireAuthenticatedUser().Build());
+    auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser().Build());
 });
+#endregion
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
 {
-	builder.AllowAnyOrigin()
-	.AllowAnyMethod()
-	.AllowAnyHeader();
+    builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
 }));
 
 // Add services to the container.
@@ -82,8 +84,8 @@ builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connecti
 
 builder.Services.AddMvc(options =>
 {
-	options.RespectBrowserAcceptHeader = true;
-	options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
+    options.RespectBrowserAcceptHeader = true;
+    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
     options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
 }).AddXmlSerializerFormatters();
 
@@ -98,17 +100,17 @@ builder.Services.AddApiVersioning();
 
 builder.Services.AddSwaggerGen(options =>
 {
-	options.SwaggerDoc("v1",
-		new OpenApiInfo
-		{
-			Title = "Rest from 0 to Azure with ASP.Net Core 6 and Docker",
-			Version = "v1",
-			Description = "API RESTful developed in course 'Rest from 0 to Azure with ASP.Net Core 6 and Docker'",
-			Contact = new OpenApiContact
-			{
-				Name = "Luiz Augusto Melo",
-				Url = new Uri("https://github.com/LuizAugustoMelo")
-			}
+    options.SwaggerDoc("v1",
+        new OpenApiInfo
+        {
+            Title = "Rest from 0 to Azure with ASP.Net Core 6 and Docker",
+            Version = "v1",
+            Description = "API RESTful developed in course 'Rest from 0 to Azure with ASP.Net Core 6 and Docker'",
+            Contact = new OpenApiContact
+            {
+                Name = "Luiz Augusto Melo",
+                Url = new Uri("https://github.com/LuizAugustoMelo")
+            }
         });
 });
 
@@ -123,23 +125,23 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 
-if(app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-	try
-	{
-		var evolveConnection = new MySqlConnection(connection);
-		var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
-		{
-			Locations = new List<string> { "db/migrations", "db/dataset" },
-			IsEraseDisabled = true,
-		};
-		evolve.Migrate();
-	}
-	catch (Exception ex)
-	{
-		Log.Error("Dtabase Migration failed", ex);
-		throw;
-	}
+    try
+    {
+        var evolveConnection = new MySqlConnection(connection);
+        var evolve = new Evolve(evolveConnection, msg => Log.Information(msg))
+        {
+            Locations = new List<string> { "db/migrations", "db/dataset" },
+            IsEraseDisabled = true,
+        };
+        evolve.Migrate();
+    }
+    catch (Exception ex)
+    {
+        Log.Error("Dtabase Migration failed", ex);
+        throw;
+    }
 }
 
 // Configure the HTTP request pipeline.
@@ -151,10 +153,10 @@ app.UseAuthorization();
 app.UseCors();
 
 app.UseSwagger();
-app.UseSwaggerUI(c => 
+app.UseSwaggerUI(c =>
 {
-	c.SwaggerEndpoint("/swagger/v1/swagger.json", 
-		"Rest from 0 to Azure with ASP.Net Core 6 and Docker - V1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json",
+        "Rest from 0 to Azure with ASP.Net Core 6 and Docker - V1");
 });
 
 var option = new RewriteOptions();

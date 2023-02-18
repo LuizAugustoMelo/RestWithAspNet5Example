@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestWithAspNet5Example.Business;
 using RestWithAspNet5Example.Data.DTO;
 using RestWithAspNet5Example.Hypermedia.Filters;
@@ -7,6 +8,7 @@ namespace RestWithAspNet5Example.Controllers
 {
     [ApiVersion("1")]
     [ApiController]
+    [Authorize("Bearer")]
     [Route("api/[controller]/v{version:apiVersion}")]
     public class PersonController : Controller
     {
