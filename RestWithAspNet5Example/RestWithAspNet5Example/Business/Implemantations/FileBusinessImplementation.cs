@@ -30,7 +30,7 @@ namespace RestWithAspNet5Example.Business.Implemantations
             if (fileType.ToLower().Equals(".pdf") || fileType.ToLower().Equals(".jpg")
                  || fileType.ToLower().Equals(".png") || fileType.ToLower().Equals(".jpeg"))
             {
-                var docName = Path.GetFileName(file.Name);
+                var docName = Path.GetFileName(file.FileName.Replace(" ", "_"));
                 var destination = Path.Combine(_basePath, "", docName);
                 fileDetail.DocName = docName;
                 fileDetail.DocType = fileType;
@@ -45,9 +45,15 @@ namespace RestWithAspNet5Example.Business.Implemantations
             return fileDetail;
         }
 
-        public Task<List<FileDetailDTO>> SaveFilesToDisk(List<IFormFile> files)
+        public async Task<List<FileDetailDTO>> SaveFilesToDisk(List<IFormFile> files)
         {
-            throw new NotImplementedException();
+            List<FileDetailDTO> filesDetail = new List<FileDetailDTO>();
+
+            foreach (var file in files)
+            {
+                filesDetail.Add(await SaveFileToDisk(file));
+            }
+            return filesDetail;
         }
     }
 }

@@ -29,5 +29,17 @@ namespace RestWithAspNet5Example.Controllers
 
             return new OkObjectResult(detail);
         }
+
+        [HttpPost("uploadMultipleFiles")]
+        [ProducesResponseType((200), Type = typeof(FileDetailDTO))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Produces("application/json")]
+        public async Task<IActionResult> UploadManyFiles([FromForm] List<IFormFile> files)
+        {
+            List<FileDetailDTO> details = await _fileBusiness.SaveFilesToDisk(files);
+
+            return new OkObjectResult(details);
+        }
     }
 }
