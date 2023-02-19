@@ -3,7 +3,7 @@
   `FirstName` varchar(80) NOT NULL,
   `LastName` varchar(80) NOT NULL,
   `Address` varchar(100) NOT NULL,
-  `Gender` varchar(6) NOT NULL,
+  `Gender` varchar(15) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `Id_UNIQUE` (`Id`)
 )
