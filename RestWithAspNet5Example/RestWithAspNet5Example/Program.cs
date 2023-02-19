@@ -131,6 +131,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
 
+/*
 if (app.Environment.IsDevelopment())
 {
     try
@@ -148,7 +149,7 @@ if (app.Environment.IsDevelopment())
         Log.Error("Dtabase Migration failed", ex);
         throw;
     }
-}
+}//*/
 
 // Configure the HTTP request pipeline.
 
