@@ -6,12 +6,9 @@
     <ProjectGuid>51e8ae95-af51-49cc-9b79-8ffe7d238d16</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>restwithaspnet5example</DockerServiceName>
+    <DockerServiceName>rest-with-aspnet5-example</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="docker-compose.override.yml">
-      <DependentUpon>docker-compose.yml</DependentUpon>
-    </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
   </ItemGroup>
