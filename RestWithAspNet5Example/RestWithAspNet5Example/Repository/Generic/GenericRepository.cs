@@ -86,5 +86,29 @@ namespace RestWithAspNet5Example.Repository.Generic
         {
             return _dbSet.Any(x => x.Id.Equals(id));
         }
+
+        public List<T> FindWithPagedSearch(string query)
+        {
+            return _dbSet.FromSqlRaw<T>(query).ToList();
+        }
+
+        public int GetCount(string query)
+        {
+            string result;
+
+            using (var connection = _context.Database.GetDbConnection())
+            {
+                connection.Open();
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = query;
+                    result = command.ExecuteScalar().ToString();
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(result)) result = "0";
+
+            return int.Parse(result);
+        }
     }
 }
