@@ -1,8 +1,37 @@
 version: '3.4'
 
 services:
-  restwithaspnet5example:
-    image: ${DOCKER_REGISTRY-}restwithaspnet5example
+  db:
+    image: rest-with-aspnet5-example-db
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restat: always
+    build:
+      context: .
+      dockerfile: db/Dockerfile
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: docker
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+      MYSQL_DATABASE: rest_with_asp_net
+    ports:
+      - 3308:3306
+    networks:
+      - udemy-network
+  rest-with-aspnet5-example:
+    image: rest-with-aspnet5-example
     build:
       context: .
       dockerfile: RestWithAspNet5Example/Dockerfile
+    environment:
+      TZ: America/Sao_Paulo
+      ASPNETCORE_ENVIROMENT: Production
+    ports:
+      - 44300:80
+    depends_on:
+      - db
+    networks:
+      - udemy-network
+  networks:
+    udemy-network:
+      driver: bridge
